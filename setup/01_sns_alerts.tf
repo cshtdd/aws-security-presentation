@@ -1,9 +1,5 @@
-provider "aws" {
-  region = "us-east-2"
-}
-
 resource "aws_sns_topic" "alerts" {
-  name = "cc-alerts"
+  name = "${var.shared_prefix}-alerts"
 }
 
 output "alerts_topic_arn" {
