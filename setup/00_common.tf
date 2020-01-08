@@ -19,19 +19,25 @@ resource "aws_s3_bucket" "compliance_bucket" {
     "Version": "2012-10-17",
     "Statement": [
         {
-            "Sid": "AWSCloudTrailAclCheck",
+            "Sid": "AWSComplianceBucketAclCheck",
             "Effect": "Allow",
             "Principal": {
-              "Service": "cloudtrail.amazonaws.com"
+              "Service": [
+                "cloudtrail.amazonaws.com",
+                "config.amazonaws.com"
+              ]
             },
             "Action": "s3:GetBucketAcl",
             "Resource": "arn:aws:s3:::${local.compliance_bucket_name}"
         },
         {
-            "Sid": "AWSCloudTrailWrite",
+            "Sid": "AWSComplianceBucketWrite",
             "Effect": "Allow",
             "Principal": {
-              "Service": "cloudtrail.amazonaws.com"
+              "Service": [
+                "cloudtrail.amazonaws.com",
+                "config.amazonaws.com"
+              ]
             },
             "Action": "s3:PutObject",
             "Resource": "arn:aws:s3:::${local.compliance_bucket_name}/*",
