@@ -11,6 +11,9 @@ resource "aws_config_configuration_recorder_status" "default_recorder" {
 resource "aws_config_delivery_channel" "default_delivery" {
   s3_bucket_name = aws_s3_bucket.compliance_bucket.bucket
   s3_key_prefix = "default-recorder"
+  snapshot_delivery_properties {
+    delivery_frequency = "One_Hour"
+  }
   depends_on     = [aws_config_configuration_recorder.default_recorder]
 }
 
