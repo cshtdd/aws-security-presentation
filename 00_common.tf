@@ -1,12 +1,8 @@
 provider "aws" {
-  region = "us-east-2"
+  region = var.aws_region
 }
 
 data "aws_caller_identity" "current" {}
-
-variable "shared_prefix" {
-  default = "cc"
-}
 
 locals {
   compliance_bucket_name = "${var.shared_prefix}-ctl-2020-01-07-compliance1"
