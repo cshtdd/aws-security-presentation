@@ -3,6 +3,9 @@ resource "aws_cloudwatch_event_rule" "guardduty_rule" {
 {
   "source": [
     "aws.guardduty"
+  ],
+  "detail-type": [
+    "GuardDuty Finding"
   ]
 }
 EOF
