@@ -30,3 +30,6 @@ override.tf.json
 
 # Ignore IntelliJ files
 .idea
+
+# Ignore zipped lambdas
+guardduty_lambda.zip
