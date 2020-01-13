@@ -1,4 +1,5 @@
 resource "aws_cloudwatch_event_rule" "guardduty_rule" {
+  name = "${var.shared_prefix}-guardduty"
   event_pattern = <<EOF
 {
   "source": [

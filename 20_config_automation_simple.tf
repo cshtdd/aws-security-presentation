@@ -1,4 +1,5 @@
 resource "aws_cloudwatch_event_rule" "config_rule" {
+  name = "${var.shared_prefix}-config"
   event_pattern = <<EOF
 {
   "source": [
