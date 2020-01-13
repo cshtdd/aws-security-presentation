@@ -32,4 +32,4 @@ override.tf.json
 .idea
 
 # Ignore zipped lambdas
-guardduty_lambda.zip
+*_lambda.zip
