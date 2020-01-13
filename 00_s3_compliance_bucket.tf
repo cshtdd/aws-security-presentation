@@ -4,6 +4,15 @@ locals {
 
 resource "aws_s3_bucket" "compliance_bucket" {
   bucket = local.compliance_bucket_name
+
+  lifecycle_rule {
+    enabled = true
+
+    expiration {
+      days = 90
+    }
+  }
+
   policy = <<POLICY
 {
     "Version": "2012-10-17",
