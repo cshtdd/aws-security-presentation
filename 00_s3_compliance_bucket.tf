@@ -50,3 +50,7 @@ resource "aws_s3_bucket" "compliance_bucket" {
 }
 POLICY
 }
+
+output "s3_bucket_compliance" {
+  value = aws_s3_bucket.compliance_bucket.id
+}
