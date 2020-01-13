@@ -13,7 +13,10 @@ data "aws_iam_policy_document" "alerts_policy" {
     actions = ["SNS:Publish"]
     resources = [aws_sns_topic.alerts.arn]
     principals {
-      identifiers = ["events.amazonaws.com"]
+      identifiers = [
+        "events.amazonaws.com",
+        "lambda.amazonaws.com"
+      ]
       type = "Service"
     }
   }
