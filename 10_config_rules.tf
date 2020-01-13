@@ -71,11 +71,18 @@ resource "aws_iam_role_policy_attachment" "default_recorder_config_policy" {
 
 resource "aws_config_config_rule" "public_read_s3_bucket" {
   name = "${var.shared_prefix}-public_read_s3_bucket"
-
   source {
     owner             = "AWS"
     source_identifier = "S3_BUCKET_PUBLIC_READ_PROHIBITED"
   }
+  depends_on = [aws_config_configuration_recorder.default_recorder]
+}
 
+resource "aws_config_config_rule" "cloudtrail_encryption_enabled" {
+  name = "${var.shared_prefix}-cloudtrail_encryption_enabled"
+  source {
+    owner = "AWS"
+    source_identifier = "CLOUD_TRAIL_ENCRYPTION_ENABLED"
+  }
   depends_on = [aws_config_configuration_recorder.default_recorder]
 }
