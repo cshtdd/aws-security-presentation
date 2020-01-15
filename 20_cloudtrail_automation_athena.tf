@@ -139,3 +139,7 @@ EOF
 
   depends_on = [null_resource.athena_table_creation]
 }
+
+output "athena_query_iam_modifications" {
+  value = aws_athena_named_query.cloudtrail_iam_modifications.id
+}
