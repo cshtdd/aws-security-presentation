@@ -83,7 +83,7 @@ vpcendpointid STRING
 ROW FORMAT SERDE 'com.amazon.emr.hive.serde.CloudTrailSerde'
 STORED AS INPUTFORMAT 'com.amazon.emr.cloudtrail.CloudTrailInputFormat'
 OUTPUTFORMAT 'org.apache.hadoop.hive.ql.io.HiveIgnoreKeyTextOutputFormat'
-LOCATION 's3://${aws_s3_bucket.compliance_bucket.id}/AWSLogs/${data.aws_caller_identity.current.account_id}/';
+LOCATION 's3://${aws_s3_bucket.compliance_bucket.id}/default-trail/AWSLogs/${data.aws_caller_identity.current.account_id}/CloudTrail';
 EOF
 }
 
