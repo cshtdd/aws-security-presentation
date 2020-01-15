@@ -127,8 +127,8 @@ resource "aws_athena_named_query" "cloudtrail_iam_modifications" {
 SELECT *
 FROM cloudtrail_logs
 WHERE
-   eventtime >= date_format(current_timestamp, '%Y-%m-%d') AND
-   eventtime < date_format(current_timestamp + interval '1' day, '%Y-%m-%d') AND
+   eventtime >= date_format(current_date - interval '1' day, '%Y-%m-%d') AND
+   eventtime < date_format(current_date, '%Y-%m-%d') AND
    eventsource = 'iam.amazonaws.com' AND
    (
      eventname NOT LIKE 'Get%' AND
