@@ -88,19 +88,35 @@ EOF
 }
 
 locals {
+  athena_table_destruction_cmd = "aws athena start-query-execution --query-string \"DROP TABLE IF EXISTS cloudtrail_logs;\" --query-execution-context \"Database=${aws_athena_database.compliance_db.name}\" --work-group \"${aws_athena_workgroup.compliance.name}\" --result-configuration \"OutputLocation=${local.athena_query_results_location}\""
   athena_table_creation_cmd = "aws athena start-query-execution --query-string \"${local.athena_table_creation_script}\" --query-execution-context \"Database=${aws_athena_database.compliance_db.name}\" --work-group \"${aws_athena_workgroup.compliance.name}\" --result-configuration \"OutputLocation=${local.athena_query_results_location}\""
+}
+
+resource "null_resource" "athena_table_destruction" {
+  triggers = {
+    command_hash = md5(local.athena_table_creation_cmd)
+  }
+
+  provisioner "local-exec" {
+    command = local.athena_table_destruction_cmd
+  }
+
+  depends_on = [aws_athena_workgroup.compliance]
 }
 
 resource "null_resource" "athena_table_creation" {
   triggers = {
-    table_creation_hash = md5(local.athena_table_creation_cmd)
+    command_hash = md5(local.athena_table_creation_cmd)
   }
 
   provisioner "local-exec" {
     command = local.athena_table_creation_cmd
   }
 
-  depends_on = [aws_athena_workgroup.compliance]
+  depends_on = [
+    aws_athena_workgroup.compliance,
+    null_resource.athena_table_destruction
+  ]
 }
 
 resource "aws_athena_named_query" "cloudtrail_iam_modifications" {
