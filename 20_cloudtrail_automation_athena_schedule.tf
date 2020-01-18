@@ -30,6 +30,7 @@ resource "aws_lambda_function" "athena_lambda" {
   handler = "main.handler"
   runtime = "nodejs12.x"
   role = aws_iam_role.athena_lambda_iam_role.arn
+  timeout = 900
   environment {
     variables = {
       ALERTS_SNS_TOPIC_ARN = aws_sns_topic.alerts.arn
