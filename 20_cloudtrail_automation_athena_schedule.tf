@@ -33,6 +33,7 @@ resource "aws_lambda_function" "athena_lambda" {
   environment {
     variables = {
       ALERTS_SNS_TOPIC_ARN = aws_sns_topic.alerts.arn
+      ATHENA_WORKGROUP = aws_athena_workgroup.compliance.name
     }
   }
 }
