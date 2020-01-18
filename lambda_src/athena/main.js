@@ -7,10 +7,19 @@ function listNamedQueries(athena, workGroup){
             WorkGroup: workGroup
         };
         athena.listNamedQueries(params, function(err, data) {
-            if (err) {
-                return reject(err)
-            }
+            if (err) return reject(err);
+            resolve(data);
+        });
+    });
+}
 
+function getNamedQueries(athena, queryIds = []) {
+    return new Promise((resolve, reject) => {
+        var params = {
+            NamedQueryIds: queryIds
+        };
+        athena.batchGetNamedQuery(params, function(err, data) {
+            if (err) return reject(err);
             resolve(data);
         });
     });
@@ -19,22 +28,30 @@ function listNamedQueries(athena, workGroup){
 exports.handler = function(event, context, callback){
     console.log('Athena Schedule Lambda Invocation');
 
+    function abortWithError(e) {
+        console.log('ERROR: ', e);
+        callback(null, 'ERROR');
+    }
+
     var athenaWorkgroup = process.env.ATHENA_WORKGROUP;
     var athena = new AWS.Athena();
 
     listNamedQueries(athena, athenaWorkgroup)
         .then((data) => {
             console.log(data);
-            var namedQueryIds = data.NamedQueryIds;
+            getNamedQueries(athena, data.NamedQueryIds)
+                .then((data) => {
+                    console.log(data);
 
-            namedQueryIds.forEach( (id) => {
-                console.log(`Executing Query: ${id}`);
-            });
+                    data.NamedQueries.forEach((query) => {
+                        console.log(`Executing Query: ${query.Name} on DB ${query.Database} Workgroup ${query.WorkGroup}`);
 
-            callback(null, 'DONE');
+                        
+                    });
+
+                    callback(null, 'DONE');
+                })
+                .catch(abortWithError);
         })
-        .catch((e) => {
-            console.log('ERROR: ', e);
-            callback(null, 'ERROR');
-        });
+        .catch(abortWithError);
 }
