@@ -1,6 +1,6 @@
 resource "aws_cloudwatch_event_rule" "athena_lambda_schedule_rule" {
   name = "${var.shared_prefix}-athena-schedule"
-  schedule_expression = "cron(*/5 * * * ? *)"
+  schedule_expression = "cron(10 1 * * ? *)"
 }
 
 resource "aws_cloudwatch_event_target" "athena_lambda" {
