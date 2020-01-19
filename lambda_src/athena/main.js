@@ -25,6 +25,25 @@ function getNamedQueries(athena, queryIds = []) {
     });
 }
 
+function startQuery(athena, queryInfo) {
+    return new Promise((resolve, reject) => {
+        var params = {
+            QueryString: queryInfo.QueryString,
+            QueryExecutionContext: {
+                Database: queryInfo.Database
+            },
+            ResultConfiguration: {
+                OutputLocation: process.env.ATHENA_QUERY_OUTPUT_LOCATION
+            },
+            WorkGroup: queryInfo.WorkGroup
+        };
+        athena.startQueryExecution(params, function(err, data) {
+            if (err) return reject(err);
+            resolve(data);
+        });
+    });
+}
+
 exports.handler = function(event, context, callback){
     console.log('Athena Schedule Lambda Invocation');
 
@@ -43,13 +62,22 @@ exports.handler = function(event, context, callback){
                 .then((data) => {
                     console.log(data);
 
-                    data.NamedQueries.forEach((query) => {
+                    var queriesLength = data.NamedQueries.length;
+
+                    data.NamedQueries.forEach((query, index) => {
                         console.log(`Executing Query: ${query.Name} on DB ${query.Database} Workgroup ${query.WorkGroup}`);
 
-                        
+                        startQuery(athena, query)
+                            .then((data) => {
+                                console.log(`Execution Id: ${data.QueryExecutionId}`);
+
+                                if (index + 1 === queriesLength){
+                                    callback(null, 'DONE');
+                                }
+                            })
+                            .catch(abortWithError);
                     });
 
-                    callback(null, 'DONE');
                 })
                 .catch(abortWithError);
         })

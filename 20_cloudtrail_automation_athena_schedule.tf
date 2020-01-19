@@ -35,6 +35,7 @@ resource "aws_lambda_function" "athena_lambda" {
     variables = {
       ALERTS_SNS_TOPIC_ARN = aws_sns_topic.alerts.arn
       ATHENA_WORKGROUP = aws_athena_workgroup.compliance.name
+      ATHENA_QUERY_OUTPUT_LOCATION = local.athena_query_results_location
     }
   }
 }
@@ -63,6 +64,16 @@ resource "aws_iam_role_policy_attachment" "athena_lambda_basic_execution_role_po
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
 }
 
+resource "aws_iam_role_policy_attachment" "athena_athena_full_access_role_policy_attachment" {
+  role = aws_iam_role.athena_lambda_iam_role.id
+  policy_arn = "arn:aws:iam::aws:policy/AmazonAthenaFullAccess"
+}
+
+resource "aws_iam_role_policy_attachment" "athena_glue_service_role_policy_attachment" {
+  role = aws_iam_role.athena_lambda_iam_role.id
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSGlueServiceRole"
+}
+
 resource "aws_iam_role_policy_attachment" "athena_lambda_policy_attachment" {
   role = aws_iam_role.athena_lambda_iam_role.id
   policy_arn = aws_iam_policy.athena_lambda_policy.arn
@@ -80,16 +91,31 @@ resource "aws_iam_policy" "athena_lambda_policy" {
     },
     {
       "Effect": "Allow",
-      "Action": "athena:*",
-      "Resource": "*"
+      "Action": [
+        "s3:GetBucketLocation",
+        "s3:GetObject",
+        "s3:ListBucket",
+        "s3:ListBucketMultipartUploads",
+        "s3:ListMultipartUploadParts",
+        "s3:AbortMultipartUpload",
+        "s3:CreateBucket",
+        "s3:PutObject"
+      ],
+      "Resource": [
+        "${aws_s3_bucket.bucket_athena_results.arn}",
+        "${aws_s3_bucket.bucket_athena_results.arn}/*"
+      ]
     },
     {
       "Effect": "Allow",
       "Action": [
-        "s3:Get*",
-        "s3:List*"
+        "s3:ListBucket",
+        "s3:GetObject"
       ],
-      "Resource": "${aws_s3_bucket.bucket_athena_results.arn}"
+      "Resource": [
+        "${aws_s3_bucket.compliance_bucket.arn}",
+        "${aws_s3_bucket.compliance_bucket.arn}/*"
+      ]
     }
   ]
 }
