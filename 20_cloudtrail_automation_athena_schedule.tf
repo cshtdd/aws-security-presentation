@@ -69,11 +69,6 @@ resource "aws_iam_role_policy_attachment" "athena_athena_full_access_role_policy
   policy_arn = "arn:aws:iam::aws:policy/AmazonAthenaFullAccess"
 }
 
-resource "aws_iam_role_policy_attachment" "athena_glue_service_role_policy_attachment" {
-  role = aws_iam_role.athena_lambda_iam_role.id
-  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSGlueServiceRole"
-}
-
 resource "aws_iam_role_policy_attachment" "athena_lambda_policy_attachment" {
   role = aws_iam_role.athena_lambda_iam_role.id
   policy_arn = aws_iam_policy.athena_lambda_policy.arn
