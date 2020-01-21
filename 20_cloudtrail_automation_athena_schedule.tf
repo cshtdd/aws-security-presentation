@@ -33,7 +33,6 @@ resource "aws_lambda_function" "athena_lambda" {
   timeout = 900
   environment {
     variables = {
-      ALERTS_SNS_TOPIC_ARN = aws_sns_topic.alerts.arn
       ATHENA_WORKGROUP = aws_athena_workgroup.compliance.name
       ATHENA_QUERY_OUTPUT_LOCATION = local.athena_query_results_location
     }
@@ -79,11 +78,6 @@ resource "aws_iam_policy" "athena_lambda_policy" {
 {
   "Version": "2012-10-17",
   "Statement": [
-    {
-      "Effect": "Allow",
-      "Action": "sns:Publish",
-      "Resource": "${aws_sns_topic.alerts.arn}"
-    },
     {
       "Effect": "Allow",
       "Action": [
