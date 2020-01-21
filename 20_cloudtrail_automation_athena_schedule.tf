@@ -9,7 +9,7 @@ resource "aws_cloudwatch_event_target" "athena_lambda" {
 }
 
 
-resource "aws_lambda_permission" "guardduty_lambda_permissions" {
+resource "aws_lambda_permission" "athena_lambda_permissions" {
   action = "lambda:InvokeFunction"
   function_name = aws_lambda_function.athena_lambda.function_name
   principal = "events.amazonaws.com"
