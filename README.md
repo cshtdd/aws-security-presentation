@@ -73,7 +73,7 @@ Create an AWS CloudWatch Event Rule that triggers an SNS Notification on any Gua
 # Running the Code  
 
 - Make sure you have `terraform` >= `0.12` installed  
-- Edit the values on [00_variables.tf](00_variables.tf) as you seem fit. Change the `compliance_bucket_name_sufix` for it may already be taken  
+- Edit the values on [`00_variables.tf`](00_variables.tf) as you seem fit. Change the `compliance_bucket_name_sufix` for it may already be taken  
 - Run `terraform init`  
 - Run `terraform apply`  
 - Run `terraform detroy` for cleanup  
