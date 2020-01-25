@@ -1,5 +1,5 @@
 locals {
-  compliance_bucket_name = "${var.shared_prefix}-ctl-2020-01-07-compliance1"
+  compliance_bucket_name = "${var.shared_prefix}-${var.compliance_bucket_name_sufix}"
 }
 
 resource "aws_s3_bucket" "compliance_bucket" {
