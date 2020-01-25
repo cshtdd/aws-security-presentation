@@ -18,9 +18,12 @@ exports.handler = function(event, context, callback) {
         callback(null, 'ERROR');
     }
 
+    const EMPTY_CSV_LENGTH = 343;
+
     var csvFiles = event.Records
         .filter(r => r.eventName === 'ObjectCreated:Put')
         .map(r => r.s3)
+        .filter(b => b.object.size > EMPTY_CSV_LENGTH)
         .map(b => {
             return {
                 Bucket: b.bucket.name,
