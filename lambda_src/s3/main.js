@@ -40,9 +40,10 @@ exports.handler = function(event, context, callback) {
 
         getObject(s3, csvInfo)
             .then((data) => {
-                console.log(JSON.stringify(data));
+                // console.log(JSON.stringify(data));
 
-                // data.Body
+                var csvContents = data.Body.toString();
+                console.log(csvContents);
 
                 callback(null, 'DONE');
             })
