@@ -69,3 +69,11 @@ Create an AWS CloudWatch Event Rule that triggers an SNS Notification on any Gua
 
 [lambda_src/s3/main.js](lambda_src/s3/main.js)  
 - Lambda code to trigger an SNS Notification whenever a non-empty `.csv` is created in the Athena results bucket  
+
+# Running the Code  
+
+- Make sure you have `terraform` >= `0.12` installed  
+- Edit the values on [00_variables.tf](00_variables.tf) as you seem fit. Change the `compliance_bucket_name_sufix` for it may already be taken  
+- Run `terraform init`  
+- Run `terraform apply`  
+- Run `terraform detroy` for cleanup  
