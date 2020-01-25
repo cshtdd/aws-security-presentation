@@ -5,3 +5,8 @@ variable "aws_region" {
 variable "shared_prefix" {
   default = "cc"
 }
+
+variable "enable_examples" {
+  default = false
+  type = bool
+}
