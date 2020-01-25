@@ -66,7 +66,7 @@ exports.handler = function(event, context, callback) {
 
                         if (processedCount === csvFiles.length){
                             console.log('Completed Successfully');
-                callback(null, 'DONE');
+                            callback(null, 'DONE');
                         }
                     })
                     .catch(abortWithError);
