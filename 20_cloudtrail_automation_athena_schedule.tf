@@ -112,6 +112,6 @@ EOF
 }
 
 resource "aws_cloudwatch_log_group" "athena_lambda_logs" {
-  name = "${aws_lambda_function.athena_lambda.function_name}-logs"
+  name = "/aws/lambda/${aws_lambda_function.athena_lambda.function_name}"
   retention_in_days = 90
 }
